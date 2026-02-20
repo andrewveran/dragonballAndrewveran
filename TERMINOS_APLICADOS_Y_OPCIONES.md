@@ -404,3 +404,111 @@ case .swiftData: try swiftDataStore.saveSession(...)
 // luego cargar sesiones
 sessions = try store.fetchSessions()
 ```
+
+## Pantalla 8 (SOLID + VIPER DBZ) - resumen rapido
+Se usa en:
+- `DragonBallAndrewVeran/DragonBallAndrewVeran/Features/DBZArchitecture/Presentation/DBZArchitectureView.swift`
+
+Terminos que practica esta pantalla:
+- `VIPER`: View, Interactor, Presenter, Entity, Router.
+- `SRP`: cada pieza tiene una sola responsabilidad clara.
+- `DIP`: Presenter depende de protocolos, no concretos.
+- `ISP`: contratos pequeños por rol (`ViewProtocol`, `InteractorProtocol`, etc).
+- `OCP`: puedes extender con otro interactor/router sin romper estructura base.
+
+Mini ejemplo del flujo (Pantalla 8):
+```swift
+View -> Presenter.onSearchTapped(name)
+Presenter -> Interactor.findFighter(name)
+Presenter -> View.showResult(...)
+Presenter -> Router.routeToDetail(...)
+```
+
+## Pantalla 9 (UI Flow Lab DBZ) - resumen rapido
+Se usa en:
+- `DragonBallAndrewVeran/DragonBallAndrewVeran/Features/DBZUIFlow/Presentation/DBZUIFlowView.swift`
+
+Terminos que practica esta pantalla:
+- `LazyVStack vs List`: mismo dataset DBZ en dos contenedores.
+- `.task(id:) vs .onAppear`: diferencia de ejecución y re-ejecución.
+- `MainActor vs DispatchQueue.main`: dos formas de actualizar UI en main thread.
+- `@State`: control de filtro, modo de contenedor, contadores de ciclo.
+
+Mini ejemplo del flujo (Pantalla 9):
+```swift
+.onAppear { appearCount += 1 }
+.task(id: taskTrigger) { taskCount += 1 }
+
+if mode == .list { List(...) }
+else { ScrollView { LazyVStack { ... } } }
+```
+
+## Pantalla 10 (Quality Lab DBZ) - resumen rapido
+Se usa en:
+- `DragonBallAndrewVeran/DragonBallAndrewVeran/Features/DBZQuality/Presentation/DBZQualityView.swift`
+
+Terminos que practica esta pantalla:
+- `Testing`: enfoque por contratos para poder testear comportamiento.
+- `Test doubles`: `Stub`, `Fake/Flaky`, `Spy`.
+- `Error handling`: retries con backoff exponencial.
+- `Observability`: logs estructurados y trazas por intento.
+- `Performance básico`: medición de duración de ejecución.
+- `RxSwift` (si el paquete está instalado): `Single`, `retry`, `DisposeBag`.
+- `Combine vs RxSwift`: diferencias de primitives y manejo de subscripciones.
+
+Mini ejemplo del flujo (Pantalla 10):
+```swift
+let power = try await fetchWithRetry(service: service, warrior: warrior, retries: 3)
+logger.log("attempt=...")
+logger.log("backoff=...")
+
+// RxSwift (opcional por canImport)
+makeRxSingle(...)
+  .retry(2)
+  .subscribe(...)
+  .disposed(by: disposeBag)
+```
+
+## Pantalla 11 (Security + Release DBZ) - resumen rapido
+Se usa en:
+- `DragonBallAndrewVeran/DragonBallAndrewVeran/Features/DBZSecurityRelease/Presentation/DBZSecurityReleaseView.swift`
+
+Terminos que practica esta pantalla:
+- `Security`: certificate pinning (simulado por comparación de fingerprint).
+- `Feature Flags`: activar/desactivar funcionalidad por porcentaje de rollout.
+- `Release strategy`: `kill switch` y `rollback` rápido.
+- `Risk control`: desactivar feature sin despliegue nuevo.
+
+Mini ejemplo del flujo (Pantalla 11):
+```swift
+if expectedFingerprint == serverFingerprint { /* pinning ok */ }
+
+let bucket = abs(userID.hashValue) % 100
+featureEnabled = bucket < rolloutPercent
+
+// rollback
+rolloutPercent = 0
+```
+
+## Pantalla 12 (Delivery Lab DBZ) - resumen rapido
+Se usa en:
+- `DragonBallAndrewVeran/DragonBallAndrewVeran/Features/DBZDelivery/Presentation/DBZDeliveryView.swift`
+
+Terminos que practica esta pantalla:
+- `CI/CD mindset`: quality gates antes de producción.
+- `Release strategy`: decisión Ship/No-Ship basada en evidencia.
+- `Feature flags + rollback`: como parte de checklist operacional.
+- `Observabilidad/quality`: gate explícito para logs y métricas.
+- `Engineering process`: release notes y readiness score.
+
+Mini ejemplo del flujo (Pantalla 12):
+```swift
+toggleGate(...)
+score = passed / total
+
+if allGatesPassed && releaseNotesNotEmpty {
+  ship = true
+} else {
+  ship = false
+}
+```

@@ -1,3 +1,18 @@
+// LEARNING-CODE-GUIDE:
+// Este archivo forma parte de una app de estudio progresiva iOS (tema Dragon Ball).
+//
+// Como leer este archivo (guia rapida):
+// 1) Objetivo del archivo: identifica si es View, ViewModel, UseCase, Repository o Store.
+// 2) Entrada principal: que dato recibe desde UI o capa superior.
+// 3) Transformacion: que logica aplica a ese dato.
+// 4) Salida: que devuelve/publica hacia la siguiente capa.
+// 5) Logs: busca prints para seguir el viaje completo del dato en consola.
+//
+// Consejo de estudio:
+// - Si te pierdes, sigue el flujo en este orden:
+//   UI -> ViewModel/Presenter -> UseCase/Interactor -> Repository/Store -> Remote/DB -> UI.
+// - Repite el flujo con un solo caso (ej: "Goku") hasta poder explicarlo sin mirar el codigo.
+//
 import SwiftUI
 
 /// Menu principal de la app de estudio.
@@ -42,6 +57,31 @@ struct RootView: View {
                 // Pantalla 7: persistencia estructurada (Core Data + SwiftData).
                 NavigationLink("Pantalla 7 - Persistence Lab") {
                     DBZPersistenceView()
+                }
+
+                // Pantalla 8: SOLID + VIPER.
+                NavigationLink("Pantalla 8 - SOLID + VIPER") {
+                    DBZArchitectureView()
+                }
+
+                // Pantalla 9: UI Flow (containers + lifecycle moderno).
+                NavigationLink("Pantalla 9 - UI Flow Lab") {
+                    DBZUIFlowView()
+                }
+
+                // Pantalla 10: calidad (testing doubles, retry/backoff, observabilidad).
+                NavigationLink("Pantalla 10 - Quality Lab") {
+                    DBZQualityView()
+                }
+
+                // Pantalla 11: seguridad y release strategy.
+                NavigationLink("Pantalla 11 - Security + Release") {
+                    DBZSecurityReleaseView()
+                }
+
+                // Pantalla 12: CI/CD mindset y decision de release.
+                NavigationLink("Pantalla 12 - Delivery Lab") {
+                    DBZDeliveryView()
                 }
             }
             .navigationTitle("Menu Principal")
