@@ -19,6 +19,12 @@ import Combine
 /// Abstraccion de red (DIP): las capas de Data dependen de este contrato,
 /// no de URLSession directo.
 protocol NetworkClient {
+    /// FUNC-GUIDE: post
+    /// - Que hace: ejecuta una parte del flujo de esta capa (UI, dominio, datos o infraestructura).
+    /// - Entrada/Salida: revisa parametros y retorno para entender como viaja el dato.
+    /// FUNC-GUIDE: post
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     func post<Request: Encodable, Response: Decodable>(
         _ url: URL,
         body: Request,
@@ -31,21 +37,57 @@ protocol NetworkClient {
 /// Senior interview note:
 /// - Delegate + weak evita retain cycle cuando hay referencias cruzadas.
 protocol NetworkClientDelegate: AnyObject {
+    /// FUNC-GUIDE: networkDidStart
+    /// - Que hace: ejecuta una parte del flujo de esta capa (UI, dominio, datos o infraestructura).
+    /// - Entrada/Salida: revisa parametros y retorno para entender como viaja el dato.
+    /// FUNC-GUIDE: networkDidStart
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     func networkDidStart(_ request: URLRequest)
+    /// FUNC-GUIDE: networkDidFinish
+    /// - Que hace: ejecuta una parte del flujo de esta capa (UI, dominio, datos o infraestructura).
+    /// - Entrada/Salida: revisa parametros y retorno para entender como viaja el dato.
+    /// FUNC-GUIDE: networkDidFinish
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     func networkDidFinish(_ request: URLRequest, statusCode: Int?)
+    /// FUNC-GUIDE: networkDidFail
+    /// - Que hace: ejecuta una parte del flujo de esta capa (UI, dominio, datos o infraestructura).
+    /// - Entrada/Salida: revisa parametros y retorno para entender como viaja el dato.
+    /// FUNC-GUIDE: networkDidFail
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     func networkDidFail(_ request: URLRequest, error: Error)
 }
 
 /// Implementacion de logging para estudiar el flujo.
 final class PrintNetworkClientDelegate: NetworkClientDelegate {
+    /// FUNC-GUIDE: networkDidStart
+    /// - Que hace: ejecuta una parte del flujo de esta capa (UI, dominio, datos o infraestructura).
+    /// - Entrada/Salida: revisa parametros y retorno para entender como viaja el dato.
+    /// FUNC-GUIDE: networkDidStart
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     func networkDidStart(_ request: URLRequest) {
         print("[NETWORK][START] \(request.httpMethod ?? "") \(request.url?.absoluteString ?? "")")
     }
 
+    /// FUNC-GUIDE: networkDidFinish
+    /// - Que hace: ejecuta una parte del flujo de esta capa (UI, dominio, datos o infraestructura).
+    /// - Entrada/Salida: revisa parametros y retorno para entender como viaja el dato.
+    /// FUNC-GUIDE: networkDidFinish
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     func networkDidFinish(_ request: URLRequest, statusCode: Int?) {
         print("[NETWORK][FINISH] status=\(statusCode.map(String.init) ?? "nil")")
     }
 
+    /// FUNC-GUIDE: networkDidFail
+    /// - Que hace: ejecuta una parte del flujo de esta capa (UI, dominio, datos o infraestructura).
+    /// - Entrada/Salida: revisa parametros y retorno para entender como viaja el dato.
+    /// FUNC-GUIDE: networkDidFail
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     func networkDidFail(_ request: URLRequest, error: Error) {
         print("[NETWORK][FAIL] error=\(error.localizedDescription)")
     }
@@ -58,11 +100,23 @@ final class URLSessionNetworkClient: NetworkClient {
     /// weak para no retener fuertemente el logger/delegate.
     private weak var delegate: NetworkClientDelegate?
 
+    /// FUNC-GUIDE: init
+    /// - Que hace: construye la instancia e inyecta dependencias iniciales.
+    /// - Entrada/Salida: recibe dependencias/estado y deja el objeto listo para usarse.
+    /// FUNC-GUIDE: init
+    /// - Qué hace: inicializa dependencias y estado base del tipo.
+    /// - Entrada/Salida: recibe configuración inicial y deja la instancia lista.
     init(session: URLSession = .shared, delegate: NetworkClientDelegate?) {
         self.session = session
         self.delegate = delegate
     }
 
+    /// FUNC-GUIDE: post
+    /// - Que hace: ejecuta una parte del flujo de esta capa (UI, dominio, datos o infraestructura).
+    /// - Entrada/Salida: revisa parametros y retorno para entender como viaja el dato.
+    /// FUNC-GUIDE: post
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     func post<Request: Encodable, Response: Decodable>(
         _ url: URL,
         body: Request,

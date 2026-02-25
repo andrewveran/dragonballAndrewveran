@@ -27,6 +27,12 @@ struct DBZCheckResponseDTO: Decodable {
         case message
     }
 
+    /// FUNC-GUIDE: init
+    /// - Que hace: construye la instancia e inyecta dependencias iniciales.
+    /// - Entrada/Salida: recibe dependencias/estado y deja el objeto listo para usarse.
+    /// FUNC-GUIDE: init
+    /// - Qué hace: inicializa dependencias y estado base del tipo.
+    /// - Entrada/Salida: recibe configuración inicial y deja la instancia lista.
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
 

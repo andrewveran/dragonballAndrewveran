@@ -30,6 +30,14 @@ final class DBZSecurityReleaseViewModel: ObservableObject {
 
     @Published var killSwitch: Bool = false
 
+    /// FUNC-GUIDE: validatePinning
+    /// - Qué hace: compara fingerprint esperado vs fingerprint recibido.
+    /// - Entrada: `expectedFingerprint`, `serverFingerprint`.
+    /// - Salida: actualiza `pinningStatus` con OK/FAIL.
+    /// - Nota: es una simulación didáctica de certificate pinning.
+    /// FUNC-GUIDE: validatePinning
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     func validatePinning() {
         let expected = expectedFingerprint.trimmingCharacters(in: .whitespacesAndNewlines)
         let incoming = serverFingerprint.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -50,6 +58,13 @@ final class DBZSecurityReleaseViewModel: ObservableObject {
 
     /// Simula feature flags por porcentaje de rollout.
     /// Hash estable por userID para que el resultado sea consistente.
+    /// FUNC-GUIDE: evaluateRollout
+    /// - Qué hace: decide si un usuario entra al feature según bucket porcentual.
+    /// - Entrada: `userID`, `rolloutPercent`, `killSwitch`.
+    /// - Salida: `featureEnabled` y `releaseStatus`.
+    /// FUNC-GUIDE: evaluateRollout
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     func evaluateRollout() {
         if killSwitch {
             featureEnabled = false
@@ -65,6 +80,12 @@ final class DBZSecurityReleaseViewModel: ObservableObject {
         print("[RELEASE] evaluate user=\(userID) bucket=\(bucket) enabled=\(featureEnabled)")
     }
 
+    /// FUNC-GUIDE: rollbackRelease
+    /// - Qué hace: fuerza rollout a 0% para apagar la feature de inmediato.
+    /// - Uso real: mitigación rápida si detectas incidentes en producción.
+    /// FUNC-GUIDE: rollbackRelease
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     func rollbackRelease() {
         rolloutPercent = 0
         featureEnabled = false

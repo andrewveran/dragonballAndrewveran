@@ -79,10 +79,22 @@ struct DBZLifecycleView: View {
 
 /// Bridge SwiftUI -> UIKit.
 private struct DBZLifecycleControllerContainer: UIViewControllerRepresentable {
+    /// FUNC-GUIDE: makeUIViewController
+    /// - Que hace: ejecuta una parte del flujo de esta capa (UI, dominio, datos o infraestructura).
+    /// - Entrada/Salida: revisa parametros y retorno para entender como viaja el dato.
+    /// FUNC-GUIDE: makeUIViewController
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     func makeUIViewController(context: Context) -> DBZLifecycleViewController {
         DBZLifecycleViewController()
     }
 
+    /// FUNC-GUIDE: updateUIViewController
+    /// - Que hace: ejecuta una parte del flujo de esta capa (UI, dominio, datos o infraestructura).
+    /// - Entrada/Salida: revisa parametros y retorno para entender como viaja el dato.
+    /// FUNC-GUIDE: updateUIViewController
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     func updateUIViewController(_ uiViewController: DBZLifecycleViewController, context: Context) {
         // No-op: esta demo solo observa lifecycle.
     }
@@ -94,6 +106,12 @@ private final class DBZLifecycleViewController: UIViewController {
     private let subtitleLabel = UILabel()
     private let statusLabel = UILabel()
 
+    /// FUNC-GUIDE: viewDidLoad
+    /// - Que hace: ejecuta una parte del flujo de esta capa (UI, dominio, datos o infraestructura).
+    /// - Entrada/Salida: revisa parametros y retorno para entender como viaja el dato.
+    /// FUNC-GUIDE: viewDidLoad
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     override func viewDidLoad() {
         super.viewDidLoad()
         print("[UIKIT][LIFECYCLE] viewDidLoad")
@@ -103,29 +121,56 @@ private final class DBZLifecycleViewController: UIViewController {
         statusLabel.text = "viewDidLoad: Cámara entra a Namek"
     }
 
+    /// FUNC-GUIDE: viewWillAppear
+    /// - Que hace: ejecuta una parte del flujo de esta capa (UI, dominio, datos o infraestructura).
+    /// - Entrada/Salida: revisa parametros y retorno para entender como viaja el dato.
+    /// FUNC-GUIDE: viewWillAppear
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         print("[UIKIT][LIFECYCLE] viewWillAppear")
         statusLabel.text = "viewWillAppear: Goku se prepara"
     }
 
+    /// FUNC-GUIDE: viewDidAppear
+    /// - Que hace: ejecuta una parte del flujo de esta capa (UI, dominio, datos o infraestructura).
+    /// - Entrada/Salida: revisa parametros y retorno para entender como viaja el dato.
+    /// FUNC-GUIDE: viewDidAppear
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         print("[UIKIT][LIFECYCLE] viewDidAppear")
         statusLabel.text = "viewDidAppear: Goku aparece en pantalla"
     }
 
+    /// FUNC-GUIDE: viewWillDisappear
+    /// - Que hace: ejecuta una parte del flujo de esta capa (UI, dominio, datos o infraestructura).
+    /// - Entrada/Salida: revisa parametros y retorno para entender como viaja el dato.
+    /// FUNC-GUIDE: viewWillDisappear
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         print("[UIKIT][LIFECYCLE] viewWillDisappear")
         statusLabel.text = "viewWillDisappear: Goku se va de la escena"
     }
 
+    /// FUNC-GUIDE: viewDidDisappear
+    /// - Que hace: ejecuta una parte del flujo de esta capa (UI, dominio, datos o infraestructura).
+    /// - Entrada/Salida: revisa parametros y retorno para entender como viaja el dato.
+    /// FUNC-GUIDE: viewDidDisappear
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         print("[UIKIT][LIFECYCLE] viewDidDisappear")
     }
 
+    /// FUNC-GUIDE: configureUI
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     private func configureUI() {
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         subtitleLabel.translatesAutoresizingMaskIntoConstraints = false

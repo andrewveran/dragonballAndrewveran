@@ -17,6 +17,12 @@ import Foundation
 
 /// Contrato de fuente remota (async/await).
 protocol DBZCharacterRemoteDataSource {
+    /// FUNC-GUIDE: fetchCharacterByName
+    /// - Que hace: ejecuta una parte del flujo de esta capa (UI, dominio, datos o infraestructura).
+    /// - Entrada/Salida: revisa parametros y retorno para entender como viaja el dato.
+    /// FUNC-GUIDE: fetchCharacterByName
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     func fetchCharacterByName(_ name: String) async throws -> DBZCharacterDTO
 }
 
@@ -24,10 +30,22 @@ final class DBZCharacterRemoteDataSourceImpl: DBZCharacterRemoteDataSource {
     private let session: URLSession
     private let baseURL = URL(string: "https://dragonball-api.com/api")!
 
+    /// FUNC-GUIDE: init
+    /// - Que hace: construye la instancia e inyecta dependencias iniciales.
+    /// - Entrada/Salida: recibe dependencias/estado y deja el objeto listo para usarse.
+    /// FUNC-GUIDE: init
+    /// - Qué hace: inicializa dependencias y estado base del tipo.
+    /// - Entrada/Salida: recibe configuración inicial y deja la instancia lista.
     init(session: URLSession = .shared) {
         self.session = session
     }
 
+    /// FUNC-GUIDE: fetchCharacterByName
+    /// - Que hace: ejecuta una parte del flujo de esta capa (UI, dominio, datos o infraestructura).
+    /// - Entrada/Salida: revisa parametros y retorno para entender como viaja el dato.
+    /// FUNC-GUIDE: fetchCharacterByName
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     func fetchCharacterByName(_ name: String) async throws -> DBZCharacterDTO {
         var comps = URLComponents(url: baseURL.appendingPathComponent("characters"), resolvingAgainstBaseURL: false)!
         comps.queryItems = [URLQueryItem(name: "name", value: name.lowercased())]

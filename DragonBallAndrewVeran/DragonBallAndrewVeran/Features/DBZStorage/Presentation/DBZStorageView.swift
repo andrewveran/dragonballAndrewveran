@@ -30,6 +30,13 @@ final class DBZStorageViewModel: ObservableObject {
     private let storage = DBZStorageManager.shared
 
     /// UserDefaults -> preferencias (datos no sensibles)
+    /// FUNC-GUIDE: savePreferences
+    /// - Qué hace: guarda guerrero y transformación favorita en UserDefaults.
+    /// - Entrada: `favoriteWarriorInput`, `transformationInput`.
+    /// - Salida: status + persistencia local no sensible.
+    /// FUNC-GUIDE: savePreferences
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     func savePreferences() {
         let warrior = favoriteWarriorInput.trimmingCharacters(in: .whitespacesAndNewlines)
         let transformation = transformationInput.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -45,6 +52,12 @@ final class DBZStorageViewModel: ObservableObject {
         print("[STORAGE][USERDEFAULTS] saved warrior=\(warrior), transformation=\(transformation)")
     }
 
+    /// FUNC-GUIDE: loadPreferences
+    /// - Qué hace: lee preferencias de UserDefaults y las adapta para UI.
+    /// - Salida: actualiza labels cargadas en pantalla.
+    /// FUNC-GUIDE: loadPreferences
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     func loadPreferences() {
         let loaded = storage.loadPreferences()
         loadedFavoriteWarrior = loaded.favoriteWarrior.isEmpty ? "(vacío)" : loaded.favoriteWarrior
@@ -53,6 +66,11 @@ final class DBZStorageViewModel: ObservableObject {
         print("[STORAGE][USERDEFAULTS] loaded warrior=\(loadedFavoriteWarrior), transformation=\(loadedTransformation)")
     }
 
+    /// FUNC-GUIDE: clearPreferences
+    /// - Qué hace: elimina preferencias guardadas y reinicia estado visual.
+    /// FUNC-GUIDE: clearPreferences
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     func clearPreferences() {
         storage.clearPreferences()
         loadedFavoriteWarrior = "-"
@@ -62,6 +80,12 @@ final class DBZStorageViewModel: ObservableObject {
     }
 
     /// Keychain -> secreto (dato sensible)
+    /// FUNC-GUIDE: saveAccessCode
+    /// - Qué hace: guarda un código sensible en Keychain.
+    /// - Por qué Keychain: credenciales/secretos no deben ir en UserDefaults.
+    /// FUNC-GUIDE: saveAccessCode
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     func saveAccessCode() {
         let code = accessCodeInput.trimmingCharacters(in: .whitespacesAndNewlines)
 
@@ -80,6 +104,12 @@ final class DBZStorageViewModel: ObservableObject {
         }
     }
 
+    /// FUNC-GUIDE: loadAccessCode
+    /// - Qué hace: intenta leer código de Keychain y mostrarlo enmascarado.
+    /// - Detalle didáctico: usa optional binding para manejar valor ausente.
+    /// FUNC-GUIDE: loadAccessCode
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     func loadAccessCode() {
         do {
             let code = try storage.loadAccessCode()
@@ -100,6 +130,11 @@ final class DBZStorageViewModel: ObservableObject {
         }
     }
 
+    /// FUNC-GUIDE: deleteAccessCode
+    /// - Qué hace: borra el secreto del Keychain y reinicia texto cargado.
+    /// FUNC-GUIDE: deleteAccessCode
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     func deleteAccessCode() {
         storage.deleteAccessCode()
         loadedAccessCodeMasked = "-"

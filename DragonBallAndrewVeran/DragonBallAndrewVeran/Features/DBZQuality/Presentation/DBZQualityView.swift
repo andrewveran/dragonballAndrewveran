@@ -22,6 +22,13 @@ import RxSwift
 // MARK: - Domain Contract
 
 protocol PowerLevelService {
+    /// FUNC-GUIDE: fetchPowerLevel
+    /// - Qué hace: contrato base para obtener power level de un guerrero.
+    /// - Entrada: `warrior`.
+    /// - Salida: un `Int` o error.
+    /// FUNC-GUIDE: fetchPowerLevel
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     func fetchPowerLevel(for warrior: String) async throws -> Int
 }
 
@@ -31,6 +38,12 @@ protocol PowerLevelService {
 struct StubPowerLevelService: PowerLevelService {
     let fixedValue: Int
 
+    /// FUNC-GUIDE: fetchPowerLevel
+    /// - Qué hace: responde un valor constante para pruebas deterministas.
+    /// - Uso: tests rápidos donde no quieres fallos ni latencia real.
+    /// FUNC-GUIDE: fetchPowerLevel
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     func fetchPowerLevel(for warrior: String) async throws -> Int {
         fixedValue
     }
@@ -41,11 +54,23 @@ final class FlakyPowerLevelService: PowerLevelService {
     private var remainingFailures: Int
     private let successValue: Int
 
+    /// FUNC-GUIDE: init
+    /// - Qué hace: configura cuántas veces fallará antes de devolver éxito.
+    /// - Uso: reproducir escenarios de retry/backoff.
+    /// FUNC-GUIDE: init
+    /// - Qué hace: inicializa dependencias y estado base del tipo.
+    /// - Entrada/Salida: recibe configuración inicial y deja la instancia lista.
     init(failuresBeforeSuccess: Int, successValue: Int = 9000) {
         self.remainingFailures = failuresBeforeSuccess
         self.successValue = successValue
     }
 
+    /// FUNC-GUIDE: fetchPowerLevel
+    /// - Qué hace: simula latencia y fallos temporales controlados.
+    /// - Salida: error durante los primeros intentos, luego éxito.
+    /// FUNC-GUIDE: fetchPowerLevel
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     func fetchPowerLevel(for warrior: String) async throws -> Int {
         try await Task.sleep(nanoseconds: 180_000_000)
 
@@ -62,11 +87,22 @@ final class FlakyPowerLevelService: PowerLevelService {
 final class SpyLogger {
     private(set) var events: [String] = []
 
+    /// FUNC-GUIDE: log
+    /// - Qué hace: guarda y muestra un evento para observabilidad.
+    /// - Uso: auditar intentos, errores y tiempos en la demo.
+    /// FUNC-GUIDE: log
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     func log(_ message: String) {
         events.append(message)
         print("[QUALITY][LOG] \(message)")
     }
 
+    /// FUNC-GUIDE: clear
+    /// - Qué hace: limpia eventos anteriores para iniciar una corrida limpia.
+    /// FUNC-GUIDE: clear
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     func clear() {
         events.removeAll()
     }
@@ -101,6 +137,12 @@ final class DBZQualityViewModel: ObservableObject {
     private var disposeBag = DisposeBag()
 #endif
 
+    /// FUNC-GUIDE: runScan
+    /// - Qué hace: punto de entrada de la pantalla.
+    /// - Decisión: si el modo es RxSwift usa flujo Rx, en otro caso async/await.
+    /// FUNC-GUIDE: runScan
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     func runScan() {
 #if canImport(RxSwift)
         if mode == .rxswift {
@@ -114,6 +156,12 @@ final class DBZQualityViewModel: ObservableObject {
         }
     }
 
+    /// Construye el servicio según el modo elegido en UI.
+    /// - Stub: éxito fijo.
+    /// - Flaky/Rx: fallos iniciales para observar retries.
+    /// FUNC-GUIDE: makeService
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     private func makeService() -> PowerLevelService {
         switch mode {
         case .stub:
@@ -128,6 +176,14 @@ final class DBZQualityViewModel: ObservableObject {
         }
     }
 
+    /// Flujo principal con async/await:
+    /// 1) valida input
+    /// 2) mide tiempo
+    /// 3) ejecuta retry/backoff
+    /// 4) publica resultado y logs
+    /// FUNC-GUIDE: executeRun
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     private func executeRun() async {
         let warrior = warriorInput.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !warrior.isEmpty else {
@@ -170,6 +226,9 @@ final class DBZQualityViewModel: ObservableObject {
     /// - Combine suele arrancar con publishers nativos (URLSession publisher, etc).
     /// - RxSwift arranca con Observable/Single y opera con operadores Rx.
     /// - En Rx usamos DisposeBag para cancelar automáticamente al liberar.
+    /// FUNC-GUIDE: runScanWithRxSwift
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     private func runScanWithRxSwift() {
         let warrior = warriorInput.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !warrior.isEmpty else {
@@ -222,6 +281,9 @@ final class DBZQualityViewModel: ObservableObject {
     }
 
     /// Puente async/await -> RxSwift Single para reutilizar el mismo servicio.
+    /// FUNC-GUIDE: makeRxSingle
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     private func makeRxSingle(service: PowerLevelService, warrior: String) -> Single<Int> {
         Single<Int>.create { single in
             let task = Task {
@@ -241,6 +303,12 @@ final class DBZQualityViewModel: ObservableObject {
 #endif
 
     /// Retry con backoff exponencial sencillo: 200ms, 400ms, 800ms...
+    /// Ejecuta la llamada y reintenta ante error.
+    /// - `retries = 3` permite hasta 4 intentos totales (1 inicial + 3 retries).
+    /// - Backoff exponencial: 200ms, 400ms, 800ms...
+    /// FUNC-GUIDE: fetchWithRetry
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     private func fetchWithRetry(service: PowerLevelService, warrior: String, retries: Int) async throws -> Int {
         var attempt = 0
         while true {

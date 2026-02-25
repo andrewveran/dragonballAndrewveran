@@ -28,14 +28,32 @@ struct FighterPower: Identifiable, Sendable {
 actor ScouterLogStore {
     private var events: [String] = []
 
+    /// FUNC-GUIDE: add
+    /// - Qué hace: agrega un evento al log interno del actor.
+    /// - Por qué actor: evita data races cuando varias tareas concurrentes escriben logs.
+    /// FUNC-GUIDE: add
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     func add(_ message: String) {
         events.append(message)
     }
 
+    /// FUNC-GUIDE: all
+    /// - Qué hace: devuelve una copia del log actual.
+    /// - Uso: inspeccionar desde UI qué ocurrió durante scans concurrentes.
+    /// FUNC-GUIDE: all
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     func all() -> [String] {
         events
     }
 
+    /// FUNC-GUIDE: clear
+    /// - Qué hace: limpia eventos previos antes de una nueva corrida.
+    /// - Beneficio: evita mezclar logs de ejecuciones distintas.
+    /// FUNC-GUIDE: clear
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     func clear() {
         events.removeAll()
     }
@@ -53,6 +71,13 @@ final class DBZConcurrencyViewModel: ObservableObject {
 
     // MARK: - Public Actions
 
+    /// FUNC-GUIDE: runSequentialScan
+    /// - Qué hace: ejecuta 3 consultas una detrás de otra (Goku -> Vegeta -> Broly).
+    /// - Objetivo didáctico: mostrar baseline secuencial para comparar contra paralelismo.
+    /// - Salida: actualiza `powers` y `stateText` según éxito/cancelación/error.
+    /// FUNC-GUIDE: runSequentialScan
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     func runSequentialScan() {
         cancelCurrentTask()
 
@@ -77,6 +102,13 @@ final class DBZConcurrencyViewModel: ObservableObject {
         }
     }
 
+    /// FUNC-GUIDE: runAsyncLetScan
+    /// - Qué hace: dispara 3 tareas en paralelo con `async let` y espera todas juntas.
+    /// - Diferencia vs secuencial: reduce tiempo total cuando las operaciones son independientes.
+    /// - Salida: orden fijo en array `[goku, vegeta, broly]` cuando todas terminan.
+    /// FUNC-GUIDE: runAsyncLetScan
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     func runAsyncLetScan() {
         cancelCurrentTask()
 
@@ -102,6 +134,13 @@ final class DBZConcurrencyViewModel: ObservableObject {
         }
     }
 
+    /// FUNC-GUIDE: runTaskGroupScan
+    /// - Qué hace: crea un grupo dinámico de tareas (`TaskGroup`) para varios nombres.
+    /// - Cuándo usarlo: cuando no conoces en compilación cuántas tareas necesitas.
+    /// - Salida: colecta resultados según van llegando y luego ordena por power desc.
+    /// FUNC-GUIDE: runTaskGroupScan
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     func runTaskGroupScan() {
         cancelCurrentTask()
 
@@ -137,11 +176,24 @@ final class DBZConcurrencyViewModel: ObservableObject {
         }
     }
 
+    /// FUNC-GUIDE: cancelCurrentTask
+    /// - Qué hace: cancela la corrida activa (si existe) y limpia referencia.
+    /// - Nota: la cancelación es cooperativa; `fetchPower` la respeta con `Task.checkCancellation()`.
+    /// FUNC-GUIDE: cancelCurrentTask
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     func cancelCurrentTask() {
         currentTask?.cancel()
         currentTask = nil
     }
 
+    /// FUNC-GUIDE: runDetachedDemo
+    /// - Qué hace: ejecuta una tarea desconectada del contexto actual (`Task.detached`).
+    /// - Objetivo: observar que no hereda automáticamente el actor/hilo de la vista.
+    /// - Salida: actualiza un texto y deja trazas en consola.
+    /// FUNC-GUIDE: runDetachedDemo
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     func runDetachedDemo() {
         Task.detached(priority: .background) {
             let isMainAtStart = Thread.isMainThread
@@ -156,6 +208,12 @@ final class DBZConcurrencyViewModel: ObservableObject {
         detachedInfo = "Task.detached lanzada (revisa consola)"
     }
 
+    /// FUNC-GUIDE: runDispatchQueueMainDemo
+    /// - Qué hace: ejemplo legacy GCD para actualizar estado en main thread.
+    /// - Comparación: alternativa a `MainActor.run` en Swift Concurrency.
+    /// FUNC-GUIDE: runDispatchQueueMainDemo
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     func runDispatchQueueMainDemo() {
         DispatchQueue.main.async {
             self.mainQueueInfo = "Update hecho con DispatchQueue.main.async"
@@ -163,6 +221,12 @@ final class DBZConcurrencyViewModel: ObservableObject {
         }
     }
 
+    /// FUNC-GUIDE: loadLogs
+    /// - Qué hace: lee logs del actor y los imprime en consola.
+    /// - Uso: validar orden real de eventos concurrentes.
+    /// FUNC-GUIDE: loadLogs
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     func loadLogs() {
         Task {
             let events = await logStore.all()
@@ -172,6 +236,10 @@ final class DBZConcurrencyViewModel: ObservableObject {
 
     // MARK: - Internals
 
+    /// Reinicia estado visible y log antes de arrancar una nueva estrategia de concurrencia.
+    /// FUNC-GUIDE: resetForNewRun
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     private func resetForNewRun(title: String) async {
         stateText = title
         powers = []
@@ -179,6 +247,12 @@ final class DBZConcurrencyViewModel: ObservableObject {
         await logStore.add("[RUN] \(title)")
     }
 
+    /// Simula una llamada async por guerrero con delay variable y soporte de cancelación.
+    /// - Entrada: `name` del guerrero.
+    /// - Salida: `FighterPower` con valor predefinido.
+    /// FUNC-GUIDE: fetchPower
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     private func fetchPower(for name: String) async throws -> FighterPower {
         try Task.checkCancellation()
 

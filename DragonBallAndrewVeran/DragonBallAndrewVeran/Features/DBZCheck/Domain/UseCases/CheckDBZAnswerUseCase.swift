@@ -18,16 +18,34 @@ import Combine
 
 /// Caso de uso (regla de negocio de la pantalla).
 protocol CheckDBZAnswerUseCase {
+    /// FUNC-GUIDE: execute
+    /// - Que hace: ejecuta una parte del flujo de esta capa (UI, dominio, datos o infraestructura).
+    /// - Entrada/Salida: revisa parametros y retorno para entender como viaja el dato.
+    /// FUNC-GUIDE: execute
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     func execute(answer: String) -> AnyPublisher<DBZCheckResult, Error>
 }
 
 final class CheckDBZAnswerUseCaseImpl: CheckDBZAnswerUseCase {
     private let repository: DBZCheckRepository
 
+    /// FUNC-GUIDE: init
+    /// - Que hace: construye la instancia e inyecta dependencias iniciales.
+    /// - Entrada/Salida: recibe dependencias/estado y deja el objeto listo para usarse.
+    /// FUNC-GUIDE: init
+    /// - Qué hace: inicializa dependencias y estado base del tipo.
+    /// - Entrada/Salida: recibe configuración inicial y deja la instancia lista.
     init(repository: DBZCheckRepository) {
         self.repository = repository
     }
 
+    /// FUNC-GUIDE: execute
+    /// - Que hace: ejecuta una parte del flujo de esta capa (UI, dominio, datos o infraestructura).
+    /// - Entrada/Salida: revisa parametros y retorno para entender como viaja el dato.
+    /// FUNC-GUIDE: execute
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     func execute(answer: String) -> AnyPublisher<DBZCheckResult, Error> {
         print("[DOMAIN][USE_CASE] execute(answer=\(answer))")
 

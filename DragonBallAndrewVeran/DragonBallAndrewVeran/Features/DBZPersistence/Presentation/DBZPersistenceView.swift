@@ -35,6 +35,12 @@ final class DBZPersistenceViewModel: ObservableObject {
     private let coreDataStore = DBZCoreDataStore()
     private let swiftDataStore: DBZSwiftDataStore?
 
+    /// FUNC-GUIDE: init
+    /// - Qué hace: inicializa ambos motores de persistencia (Core Data y SwiftData).
+    /// - Caso especial: si SwiftData no está disponible, deja un estado informativo.
+    /// FUNC-GUIDE: init
+    /// - Qué hace: inicializa dependencias y estado base del tipo.
+    /// - Entrada/Salida: recibe configuración inicial y deja la instancia lista.
     init() {
         swiftDataStore = try? DBZSwiftDataStore()
         if swiftDataStore == nil {
@@ -42,6 +48,13 @@ final class DBZPersistenceViewModel: ObservableObject {
         }
     }
 
+    /// FUNC-GUIDE: saveSession
+    /// - Qué hace: valida input de UI y guarda una sesión usando el motor seleccionado.
+    /// - Entradas: `warriorInput`, `minutesInput`, `selectedEngine`.
+    /// - Salida: actualiza `status` y recarga `sessions` para refrescar la lista.
+    /// FUNC-GUIDE: saveSession
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     func saveSession() {
         let warrior = warriorInput.trimmingCharacters(in: .whitespacesAndNewlines)
 
@@ -76,6 +89,12 @@ final class DBZPersistenceViewModel: ObservableObject {
         }
     }
 
+    /// FUNC-GUIDE: loadSessions
+    /// - Qué hace: lee sesiones persistidas desde Core Data o SwiftData.
+    /// - Salida: rellena `sessions` (view data) y muestra estado de carga.
+    /// FUNC-GUIDE: loadSessions
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     func loadSessions() {
         do {
             switch selectedEngine {
@@ -98,6 +117,12 @@ final class DBZPersistenceViewModel: ObservableObject {
         }
     }
 
+    /// FUNC-GUIDE: clearSessions
+    /// - Qué hace: borra todas las sesiones del motor activo.
+    /// - Salida: limpia tabla en UI y actualiza `status`.
+    /// FUNC-GUIDE: clearSessions
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     func clearSessions() {
         do {
             switch selectedEngine {

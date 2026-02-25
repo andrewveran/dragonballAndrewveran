@@ -20,10 +20,22 @@ import Combine
 final class DBZCheckRepositoryImpl: DBZCheckRepository {
     private let remote: DBZCheckRemoteDataSource
 
+    /// FUNC-GUIDE: init
+    /// - Que hace: construye la instancia e inyecta dependencias iniciales.
+    /// - Entrada/Salida: recibe dependencias/estado y deja el objeto listo para usarse.
+    /// FUNC-GUIDE: init
+    /// - Qué hace: inicializa dependencias y estado base del tipo.
+    /// - Entrada/Salida: recibe configuración inicial y deja la instancia lista.
     init(remote: DBZCheckRemoteDataSource) {
         self.remote = remote
     }
 
+    /// FUNC-GUIDE: checkAnswer
+    /// - Que hace: ejecuta una parte del flujo de esta capa (UI, dominio, datos o infraestructura).
+    /// - Entrada/Salida: revisa parametros y retorno para entender como viaja el dato.
+    /// FUNC-GUIDE: checkAnswer
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     func checkAnswer(_ answer: String) -> AnyPublisher<DBZCheckResult, Error> {
         print("[DATA][REPOSITORY] checkAnswer(answer=\(answer))")
 

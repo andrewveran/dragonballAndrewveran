@@ -21,11 +21,23 @@ final class StateLabViewModel: ObservableObject {
     @Published var sharedCount: Int = 0
     @Published var sharedText: String = ""
 
+    /// FUNC-GUIDE: incrementSharedCount
+    /// - Que hace: ejecuta una parte del flujo de esta capa (UI, dominio, datos o infraestructura).
+    /// - Entrada/Salida: revisa parametros y retorno para entender como viaja el dato.
+    /// FUNC-GUIDE: incrementSharedCount
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     func incrementSharedCount() {
         sharedCount += 1
         print("[STATE-LAB][VM] senzuBeans=\(sharedCount)")
     }
 
+    /// FUNC-GUIDE: resetSharedCount
+    /// - Que hace: ejecuta una parte del flujo de esta capa (UI, dominio, datos o infraestructura).
+    /// - Entrada/Salida: revisa parametros y retorno para entender como viaja el dato.
+    /// FUNC-GUIDE: resetSharedCount
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     func resetSharedCount() {
         sharedCount = 0
         print("[STATE-LAB][VM] senzuBeans reset")

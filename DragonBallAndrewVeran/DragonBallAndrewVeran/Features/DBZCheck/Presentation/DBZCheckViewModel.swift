@@ -42,10 +42,24 @@ final class DBZCheckViewModel: ObservableObject {
     /// - Sin guardar AnyCancellable, el stream se libera y no entrega valores.
     private var cancellables = Set<AnyCancellable>()
 
+    /// FUNC-GUIDE: init
+    /// - Qué hace: recibe el caso de uso para que el ViewModel no dependa de red directa.
+    /// - Por qué importa: facilita tests (puedes inyectar un use case mock) y mantiene MVVM limpio.
+    /// FUNC-GUIDE: init
+    /// - Qué hace: inicializa dependencias y estado base del tipo.
+    /// - Entrada/Salida: recibe configuración inicial y deja la instancia lista.
     init(useCase: CheckDBZAnswerUseCase) {
         self.useCase = useCase
     }
 
+    /// FUNC-GUIDE: submit
+    /// - Qué hace: toma el texto escrito por el usuario, valida, dispara el use case y actualiza `state`.
+    /// - Entrada: `inputText` (estado de la UI).
+    /// - Salida: cambia `state` a `.loading`, luego `.success/.failure` según respuesta de negocio/red.
+    /// - Flujo: UI -> submit() -> useCase -> publisher -> state -> re-render SwiftUI.
+    /// FUNC-GUIDE: submit
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     func submit() {
         // Normalizamos input (evita errores por espacios accidentales).
         let answer = inputText.trimmingCharacters(in: .whitespacesAndNewlines)

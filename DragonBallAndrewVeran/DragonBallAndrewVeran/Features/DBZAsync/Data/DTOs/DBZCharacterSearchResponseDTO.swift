@@ -22,6 +22,12 @@ struct DBZCharacterSearchResponseDTO: Decodable {
 
     private enum Keys: String, CodingKey { case items }
 
+    /// FUNC-GUIDE: init
+    /// - Que hace: construye la instancia e inyecta dependencias iniciales.
+    /// - Entrada/Salida: recibe dependencias/estado y deja el objeto listo para usarse.
+    /// FUNC-GUIDE: init
+    /// - Qué hace: inicializa dependencias y estado base del tipo.
+    /// - Entrada/Salida: recibe configuración inicial y deja la instancia lista.
     init(from decoder: Decoder) throws {
         if let keyed = try? decoder.container(keyedBy: Keys.self),
            let items = try? keyed.decode([DBZCharacterDTO].self, forKey: .items),

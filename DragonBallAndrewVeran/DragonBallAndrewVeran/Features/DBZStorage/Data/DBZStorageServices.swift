@@ -34,21 +34,45 @@ final class DBZUserDefaultsStore {
         static let preferredTransformation = "dbz.preferredTransformation"
     }
 
+    /// FUNC-GUIDE: init
+    /// - Que hace: construye la instancia e inyecta dependencias iniciales.
+    /// - Entrada/Salida: recibe dependencias/estado y deja el objeto listo para usarse.
+    /// FUNC-GUIDE: init
+    /// - Qué hace: inicializa dependencias y estado base del tipo.
+    /// - Entrada/Salida: recibe configuración inicial y deja la instancia lista.
     init(defaults: UserDefaults = .standard) {
         self.defaults = defaults
     }
 
+    /// FUNC-GUIDE: save
+    /// - Que hace: ejecuta una parte del flujo de esta capa (UI, dominio, datos o infraestructura).
+    /// - Entrada/Salida: revisa parametros y retorno para entender como viaja el dato.
+    /// FUNC-GUIDE: save
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     func save(preferences: DBZProfilePreferences) {
         defaults.set(preferences.favoriteWarrior, forKey: Keys.favoriteWarrior)
         defaults.set(preferences.preferredTransformation, forKey: Keys.preferredTransformation)
     }
 
+    /// FUNC-GUIDE: load
+    /// - Que hace: ejecuta una parte del flujo de esta capa (UI, dominio, datos o infraestructura).
+    /// - Entrada/Salida: revisa parametros y retorno para entender como viaja el dato.
+    /// FUNC-GUIDE: load
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     func load() -> DBZProfilePreferences {
         let warrior = defaults.string(forKey: Keys.favoriteWarrior) ?? ""
         let transformation = defaults.string(forKey: Keys.preferredTransformation) ?? ""
         return DBZProfilePreferences(favoriteWarrior: warrior, preferredTransformation: transformation)
     }
 
+    /// FUNC-GUIDE: clear
+    /// - Que hace: ejecuta una parte del flujo de esta capa (UI, dominio, datos o infraestructura).
+    /// - Entrada/Salida: revisa parametros y retorno para entender como viaja el dato.
+    /// FUNC-GUIDE: clear
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     func clear() {
         defaults.removeObject(forKey: Keys.favoriteWarrior)
         defaults.removeObject(forKey: Keys.preferredTransformation)
@@ -62,6 +86,12 @@ final class DBZKeychainStore {
     private let service = "com.dragonballAndrewveran.storage"
     private let account = "scouter_access_code"
 
+    /// FUNC-GUIDE: save
+    /// - Que hace: ejecuta una parte del flujo de esta capa (UI, dominio, datos o infraestructura).
+    /// - Entrada/Salida: revisa parametros y retorno para entender como viaja el dato.
+    /// FUNC-GUIDE: save
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     func save(code: String) throws {
         guard let data = code.data(using: .utf8) else {
             throw NSError(domain: "DBZKeychainStore", code: -1, userInfo: [NSLocalizedDescriptionKey: "No se pudo codificar el access code"])
@@ -83,6 +113,12 @@ final class DBZKeychainStore {
         }
     }
 
+    /// FUNC-GUIDE: load
+    /// - Que hace: ejecuta una parte del flujo de esta capa (UI, dominio, datos o infraestructura).
+    /// - Entrada/Salida: revisa parametros y retorno para entender como viaja el dato.
+    /// FUNC-GUIDE: load
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     func load() throws -> String? {
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
@@ -112,6 +148,12 @@ final class DBZKeychainStore {
     }
 
     @discardableResult
+    /// FUNC-GUIDE: delete
+    /// - Que hace: ejecuta una parte del flujo de esta capa (UI, dominio, datos o infraestructura).
+    /// - Entrada/Salida: revisa parametros y retorno para entender como viaja el dato.
+    /// FUNC-GUIDE: delete
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     func delete() -> OSStatus {
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
@@ -134,28 +176,67 @@ final class DBZStorageManager {
     private let defaultsStore = DBZUserDefaultsStore()
     private let keychainStore = DBZKeychainStore()
 
+    /// FUNC-GUIDE: init
+    /// - Qué hace: inicializa dependencias y estado base del tipo.
+    /// - Entrada/Salida: recibe configuración inicial y deja la instancia lista.
     private init() {}
 
+    /// FUNC-GUIDE: savePreferences
+    /// - Que hace: ejecuta una parte del flujo de esta capa (UI, dominio, datos o infraestructura).
+    /// - Entrada/Salida: revisa parametros y retorno para entender como viaja el dato.
+    /// FUNC-GUIDE: savePreferences
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     func savePreferences(_ preferences: DBZProfilePreferences) {
         defaultsStore.save(preferences: preferences)
     }
 
+    /// FUNC-GUIDE: loadPreferences
+    /// - Que hace: ejecuta una parte del flujo de esta capa (UI, dominio, datos o infraestructura).
+    /// - Entrada/Salida: revisa parametros y retorno para entender como viaja el dato.
+    /// FUNC-GUIDE: loadPreferences
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     func loadPreferences() -> DBZProfilePreferences {
         defaultsStore.load()
     }
 
+    /// FUNC-GUIDE: clearPreferences
+    /// - Que hace: ejecuta una parte del flujo de esta capa (UI, dominio, datos o infraestructura).
+    /// - Entrada/Salida: revisa parametros y retorno para entender como viaja el dato.
+    /// FUNC-GUIDE: clearPreferences
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     func clearPreferences() {
         defaultsStore.clear()
     }
 
+    /// FUNC-GUIDE: saveAccessCode
+    /// - Que hace: ejecuta una parte del flujo de esta capa (UI, dominio, datos o infraestructura).
+    /// - Entrada/Salida: revisa parametros y retorno para entender como viaja el dato.
+    /// FUNC-GUIDE: saveAccessCode
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     func saveAccessCode(_ code: String) throws {
         try keychainStore.save(code: code)
     }
 
+    /// FUNC-GUIDE: loadAccessCode
+    /// - Que hace: ejecuta una parte del flujo de esta capa (UI, dominio, datos o infraestructura).
+    /// - Entrada/Salida: revisa parametros y retorno para entender como viaja el dato.
+    /// FUNC-GUIDE: loadAccessCode
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     func loadAccessCode() throws -> String? {
         try keychainStore.load()
     }
 
+    /// FUNC-GUIDE: deleteAccessCode
+    /// - Que hace: ejecuta una parte del flujo de esta capa (UI, dominio, datos o infraestructura).
+    /// - Entrada/Salida: revisa parametros y retorno para entender como viaja el dato.
+    /// FUNC-GUIDE: deleteAccessCode
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     func deleteAccessCode() {
         _ = keychainStore.delete()
     }

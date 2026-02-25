@@ -30,6 +30,12 @@ struct DBZTrainingSessionViewData: Identifiable, Equatable {
 final class DBZCoreDataStore {
     private let container: NSPersistentContainer
 
+    /// FUNC-GUIDE: init
+    /// - Que hace: construye la instancia e inyecta dependencias iniciales.
+    /// - Entrada/Salida: recibe dependencias/estado y deja el objeto listo para usarse.
+    /// FUNC-GUIDE: init
+    /// - Qué hace: inicializa dependencias y estado base del tipo.
+    /// - Entrada/Salida: recibe configuración inicial y deja la instancia lista.
     init(inMemory: Bool = false) {
         container = NSPersistentContainer(name: "DBZCoreDataModel", managedObjectModel: Self.makeModel())
 
@@ -46,6 +52,12 @@ final class DBZCoreDataStore {
         }
     }
 
+    /// FUNC-GUIDE: saveSession
+    /// - Que hace: ejecuta una parte del flujo de esta capa (UI, dominio, datos o infraestructura).
+    /// - Entrada/Salida: revisa parametros y retorno para entender como viaja el dato.
+    /// FUNC-GUIDE: saveSession
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     func saveSession(warrior: String, minutes: Int) throws {
         let context = container.viewContext
         let object = NSEntityDescription.insertNewObject(forEntityName: "CoreDBZTraining", into: context)
@@ -56,6 +68,12 @@ final class DBZCoreDataStore {
         try context.save()
     }
 
+    /// FUNC-GUIDE: fetchSessions
+    /// - Que hace: ejecuta una parte del flujo de esta capa (UI, dominio, datos o infraestructura).
+    /// - Entrada/Salida: revisa parametros y retorno para entender como viaja el dato.
+    /// FUNC-GUIDE: fetchSessions
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     func fetchSessions() throws -> [DBZTrainingSessionViewData] {
         let context = container.viewContext
         let request = NSFetchRequest<NSManagedObject>(entityName: "CoreDBZTraining")
@@ -80,6 +98,12 @@ final class DBZCoreDataStore {
         }
     }
 
+    /// FUNC-GUIDE: clearAll
+    /// - Que hace: ejecuta una parte del flujo de esta capa (UI, dominio, datos o infraestructura).
+    /// - Entrada/Salida: revisa parametros y retorno para entender como viaja el dato.
+    /// FUNC-GUIDE: clearAll
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     func clearAll() throws {
         let context = container.viewContext
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: "CoreDBZTraining")
@@ -88,6 +112,9 @@ final class DBZCoreDataStore {
         try context.save()
     }
 
+    /// FUNC-GUIDE: makeModel
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     private static func makeModel() -> NSManagedObjectModel {
         let model = NSManagedObjectModel()
 
@@ -130,6 +157,12 @@ final class SwiftDBZTrainingSession {
     var minutes: Int
     var createdAt: Date
 
+    /// FUNC-GUIDE: init
+    /// - Que hace: construye la instancia e inyecta dependencias iniciales.
+    /// - Entrada/Salida: recibe dependencias/estado y deja el objeto listo para usarse.
+    /// FUNC-GUIDE: init
+    /// - Qué hace: inicializa dependencias y estado base del tipo.
+    /// - Entrada/Salida: recibe configuración inicial y deja la instancia lista.
     init(id: UUID = UUID(), warrior: String, minutes: Int, createdAt: Date = .now) {
         self.id = id
         self.warrior = warrior
@@ -142,18 +175,36 @@ final class DBZSwiftDataStore {
     private let container: ModelContainer
     private let context: ModelContext
 
+    /// FUNC-GUIDE: init
+    /// - Que hace: construye la instancia e inyecta dependencias iniciales.
+    /// - Entrada/Salida: recibe dependencias/estado y deja el objeto listo para usarse.
+    /// FUNC-GUIDE: init
+    /// - Qué hace: inicializa dependencias y estado base del tipo.
+    /// - Entrada/Salida: recibe configuración inicial y deja la instancia lista.
     init(inMemory: Bool = false) throws {
         let config = ModelConfiguration("DBZSwiftDataModel", isStoredInMemoryOnly: inMemory)
         container = try ModelContainer(for: SwiftDBZTrainingSession.self, configurations: config)
         context = ModelContext(container)
     }
 
+    /// FUNC-GUIDE: saveSession
+    /// - Que hace: ejecuta una parte del flujo de esta capa (UI, dominio, datos o infraestructura).
+    /// - Entrada/Salida: revisa parametros y retorno para entender como viaja el dato.
+    /// FUNC-GUIDE: saveSession
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     func saveSession(warrior: String, minutes: Int) throws {
         let session = SwiftDBZTrainingSession(warrior: warrior, minutes: minutes)
         context.insert(session)
         try context.save()
     }
 
+    /// FUNC-GUIDE: fetchSessions
+    /// - Que hace: ejecuta una parte del flujo de esta capa (UI, dominio, datos o infraestructura).
+    /// - Entrada/Salida: revisa parametros y retorno para entender como viaja el dato.
+    /// FUNC-GUIDE: fetchSessions
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     func fetchSessions() throws -> [DBZTrainingSessionViewData] {
         let descriptor = FetchDescriptor<SwiftDBZTrainingSession>(
             sortBy: [SortDescriptor(\.createdAt, order: .reverse)]
@@ -171,6 +222,12 @@ final class DBZSwiftDataStore {
         }
     }
 
+    /// FUNC-GUIDE: clearAll
+    /// - Que hace: ejecuta una parte del flujo de esta capa (UI, dominio, datos o infraestructura).
+    /// - Entrada/Salida: revisa parametros y retorno para entender como viaja el dato.
+    /// FUNC-GUIDE: clearAll
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     func clearAll() throws {
         let rows = try context.fetch(FetchDescriptor<SwiftDBZTrainingSession>())
         for row in rows {

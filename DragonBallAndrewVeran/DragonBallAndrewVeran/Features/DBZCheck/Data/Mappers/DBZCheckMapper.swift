@@ -20,6 +20,9 @@ import Foundation
 /// Senior interview note:
 /// - El mapper evita "contaminar" Domain con detalles de API.
 enum DBZCheckMapper {
+    /// FUNC-GUIDE: map
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     static func map(_ dto: DBZCheckResponseDTO) -> DBZCheckResult {
         DBZCheckResult(isCorrect: dto.isCorrect, message: dto.message)
     }

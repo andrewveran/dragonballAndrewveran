@@ -17,6 +17,9 @@ import Foundation
 
 /// Mapper Data -> Domain.
 enum DBZCharacterMapper {
+    /// FUNC-GUIDE: map
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     static func map(_ dto: DBZCharacterDTO) -> DBZCharacter {
         DBZCharacter(
             id: dto.id ?? -1,

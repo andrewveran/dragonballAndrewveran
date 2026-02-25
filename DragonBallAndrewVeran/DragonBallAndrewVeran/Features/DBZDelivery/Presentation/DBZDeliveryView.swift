@@ -50,6 +50,13 @@ final class DBZDeliveryViewModel: ObservableObject {
         passedCount == gates.count && !releaseNoteInput.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
 
+    /// FUNC-GUIDE: toggleGate
+    /// - Qué hace: marca/desmarca un quality gate del checklist.
+    /// - Entrada: `gateID`.
+    /// - Salida: recalcula estado general de release readiness.
+    /// FUNC-GUIDE: toggleGate
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     func toggleGate(_ gateID: UUID) {
         guard let index = gates.firstIndex(where: { $0.id == gateID }) else { return }
         gates[index].passed.toggle()
@@ -57,6 +64,12 @@ final class DBZDeliveryViewModel: ObservableObject {
         recalculateStatus()
     }
 
+    /// FUNC-GUIDE: generateReleaseSummary
+    /// - Qué hace: construye un texto final con score, gates cumplidos y release notes.
+    /// - Uso: copiar/pegar en PR, ticket o checklist de release.
+    /// FUNC-GUIDE: generateReleaseSummary
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     func generateReleaseSummary() -> String {
         let done = gates.filter { $0.passed }.map { "- ✅ \($0.title)" }
         let pending = gates.filter { !$0.passed }.map { "- ⏳ \($0.title)" }
@@ -76,6 +89,10 @@ final class DBZDeliveryViewModel: ObservableObject {
         ].joined(separator: "\n")
     }
 
+    /// Recalcula el estado visible del release en función de score y notas.
+    /// FUNC-GUIDE: recalculateStatus
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     private func recalculateStatus() {
         if canShip {
             status = "Listo para release 🚀"

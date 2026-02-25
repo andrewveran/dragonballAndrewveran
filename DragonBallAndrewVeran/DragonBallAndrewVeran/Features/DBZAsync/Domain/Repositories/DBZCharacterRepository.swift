@@ -17,5 +17,11 @@ import Foundation
 
 /// Contrato del repositorio en dominio (async/await).
 protocol DBZCharacterRepository {
+    /// FUNC-GUIDE: getCharacterByName
+    /// - Que hace: ejecuta una parte del flujo de esta capa (UI, dominio, datos o infraestructura).
+    /// - Entrada/Salida: revisa parametros y retorno para entender como viaja el dato.
+    /// FUNC-GUIDE: getCharacterByName
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     func getCharacterByName(_ name: String) async throws -> DBZCharacter
 }

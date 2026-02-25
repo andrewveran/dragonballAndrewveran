@@ -19,6 +19,12 @@ import SwiftUI
 struct DBZAsyncView: View {
     @StateObject private var viewModel: DBZAsyncViewModel
 
+    /// FUNC-GUIDE: init
+    /// - Que hace: construye la instancia e inyecta dependencias iniciales.
+    /// - Entrada/Salida: recibe dependencias/estado y deja el objeto listo para usarse.
+    /// FUNC-GUIDE: init
+    /// - Qué hace: inicializa dependencias y estado base del tipo.
+    /// - Entrada/Salida: recibe configuración inicial y deja la instancia lista.
     init() {
         // Composition root del modulo.
         let remote = DBZCharacterRemoteDataSourceImpl()
@@ -122,6 +128,9 @@ struct DBZAsyncView: View {
         }
     }
 
+    /// FUNC-GUIDE: describe
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     private func describe(_ state: DBZAsyncViewState) -> String {
         switch state {
         case .idle:

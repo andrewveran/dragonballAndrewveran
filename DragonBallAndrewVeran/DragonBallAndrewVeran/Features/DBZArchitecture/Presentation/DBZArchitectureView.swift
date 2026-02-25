@@ -27,22 +27,70 @@ struct DBZFighterRank: Identifiable {
 // MARK: - VIPER Contracts
 
 protocol DBZRankViewProtocol: AnyObject {
+    /// FUNC-GUIDE: showLoading
+    /// - Que hace: ejecuta una parte del flujo de esta capa (UI, dominio, datos o infraestructura).
+    /// - Entrada/Salida: revisa parametros y retorno para entender como viaja el dato.
+    /// FUNC-GUIDE: showLoading
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     func showLoading(_ loading: Bool)
+    /// FUNC-GUIDE: showResult
+    /// - Que hace: ejecuta una parte del flujo de esta capa (UI, dominio, datos o infraestructura).
+    /// - Entrada/Salida: revisa parametros y retorno para entender como viaja el dato.
+    /// FUNC-GUIDE: showResult
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     func showResult(_ fighter: DBZFighterRank)
+    /// FUNC-GUIDE: showError
+    /// - Que hace: ejecuta una parte del flujo de esta capa (UI, dominio, datos o infraestructura).
+    /// - Entrada/Salida: revisa parametros y retorno para entender como viaja el dato.
+    /// FUNC-GUIDE: showError
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     func showError(_ message: String)
+    /// FUNC-GUIDE: showRouteMessage
+    /// - Que hace: ejecuta una parte del flujo de esta capa (UI, dominio, datos o infraestructura).
+    /// - Entrada/Salida: revisa parametros y retorno para entender como viaja el dato.
+    /// FUNC-GUIDE: showRouteMessage
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     func showRouteMessage(_ message: String)
 }
 
 protocol DBZRankPresenterProtocol {
+    /// FUNC-GUIDE: onSearchTapped
+    /// - Que hace: ejecuta una parte del flujo de esta capa (UI, dominio, datos o infraestructura).
+    /// - Entrada/Salida: revisa parametros y retorno para entender como viaja el dato.
+    /// FUNC-GUIDE: onSearchTapped
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     func onSearchTapped(name: String)
+    /// FUNC-GUIDE: onOpenDetailTapped
+    /// - Que hace: ejecuta una parte del flujo de esta capa (UI, dominio, datos o infraestructura).
+    /// - Entrada/Salida: revisa parametros y retorno para entender como viaja el dato.
+    /// FUNC-GUIDE: onOpenDetailTapped
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     func onOpenDetailTapped()
 }
 
 protocol DBZRankInteractorProtocol {
+    /// FUNC-GUIDE: findFighter
+    /// - Que hace: ejecuta una parte del flujo de esta capa (UI, dominio, datos o infraestructura).
+    /// - Entrada/Salida: revisa parametros y retorno para entender como viaja el dato.
+    /// FUNC-GUIDE: findFighter
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     func findFighter(name: String) -> DBZFighterRank?
 }
 
 protocol DBZRankRouterProtocol {
+    /// FUNC-GUIDE: routeToDetail
+    /// - Que hace: ejecuta una parte del flujo de esta capa (UI, dominio, datos o infraestructura).
+    /// - Entrada/Salida: revisa parametros y retorno para entender como viaja el dato.
+    /// FUNC-GUIDE: routeToDetail
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     func routeToDetail(for fighter: DBZFighterRank) -> String
 }
 
@@ -56,6 +104,12 @@ final class DBZRankInteractor: DBZRankInteractorProtocol {
         DBZFighterRank(name: "Broly", tier: "S+")
     ]
 
+    /// FUNC-GUIDE: findFighter
+    /// - Que hace: ejecuta una parte del flujo de esta capa (UI, dominio, datos o infraestructura).
+    /// - Entrada/Salida: revisa parametros y retorno para entender como viaja el dato.
+    /// FUNC-GUIDE: findFighter
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     func findFighter(name: String) -> DBZFighterRank? {
         let normalized = name.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
         return fighters.first { $0.name.lowercased() == normalized }
@@ -66,6 +120,12 @@ final class DBZRankInteractor: DBZRankInteractorProtocol {
 
 /// SRP: solo define navegación/mensaje de ruta.
 final class DBZRankRouter: DBZRankRouterProtocol {
+    /// FUNC-GUIDE: routeToDetail
+    /// - Que hace: ejecuta una parte del flujo de esta capa (UI, dominio, datos o infraestructura).
+    /// - Entrada/Salida: revisa parametros y retorno para entender como viaja el dato.
+    /// FUNC-GUIDE: routeToDetail
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     func routeToDetail(for fighter: DBZFighterRank) -> String {
         "Router: navegar a detalle de \(fighter.name) (Tier \(fighter.tier))"
     }
@@ -80,15 +140,33 @@ final class DBZRankPresenter: DBZRankPresenterProtocol {
     private weak var view: DBZRankViewProtocol?
     private var selectedFighter: DBZFighterRank?
 
+    /// FUNC-GUIDE: init
+    /// - Que hace: construye la instancia e inyecta dependencias iniciales.
+    /// - Entrada/Salida: recibe dependencias/estado y deja el objeto listo para usarse.
+    /// FUNC-GUIDE: init
+    /// - Qué hace: inicializa dependencias y estado base del tipo.
+    /// - Entrada/Salida: recibe configuración inicial y deja la instancia lista.
     init(interactor: DBZRankInteractorProtocol, router: DBZRankRouterProtocol) {
         self.interactor = interactor
         self.router = router
     }
 
+    /// FUNC-GUIDE: attachView
+    /// - Que hace: ejecuta una parte del flujo de esta capa (UI, dominio, datos o infraestructura).
+    /// - Entrada/Salida: revisa parametros y retorno para entender como viaja el dato.
+    /// FUNC-GUIDE: attachView
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     func attachView(_ view: DBZRankViewProtocol) {
         self.view = view
     }
 
+    /// FUNC-GUIDE: onSearchTapped
+    /// - Que hace: ejecuta una parte del flujo de esta capa (UI, dominio, datos o infraestructura).
+    /// - Entrada/Salida: revisa parametros y retorno para entender como viaja el dato.
+    /// FUNC-GUIDE: onSearchTapped
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     func onSearchTapped(name: String) {
         view?.showLoading(true)
 
@@ -110,6 +188,12 @@ final class DBZRankPresenter: DBZRankPresenterProtocol {
         view?.showLoading(false)
     }
 
+    /// FUNC-GUIDE: onOpenDetailTapped
+    /// - Que hace: ejecuta una parte del flujo de esta capa (UI, dominio, datos o infraestructura).
+    /// - Entrada/Salida: revisa parametros y retorno para entender como viaja el dato.
+    /// FUNC-GUIDE: onOpenDetailTapped
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     func onOpenDetailTapped() {
         guard let selectedFighter else {
             view?.showError("Primero busca un guerrero")
@@ -132,6 +216,12 @@ final class DBZRankViewAdapter: ObservableObject, DBZRankViewProtocol {
 
     private let presenter: DBZRankPresenter
 
+    /// FUNC-GUIDE: init
+    /// - Que hace: construye la instancia e inyecta dependencias iniciales.
+    /// - Entrada/Salida: recibe dependencias/estado y deja el objeto listo para usarse.
+    /// FUNC-GUIDE: init
+    /// - Qué hace: inicializa dependencias y estado base del tipo.
+    /// - Entrada/Salida: recibe configuración inicial y deja la instancia lista.
     init() {
         let interactor = DBZRankInteractor()
         let router = DBZRankRouter()
@@ -139,31 +229,67 @@ final class DBZRankViewAdapter: ObservableObject, DBZRankViewProtocol {
         presenter.attachView(self)
     }
 
+    /// FUNC-GUIDE: search
+    /// - Que hace: ejecuta una parte del flujo de esta capa (UI, dominio, datos o infraestructura).
+    /// - Entrada/Salida: revisa parametros y retorno para entender como viaja el dato.
+    /// FUNC-GUIDE: search
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     func search() {
         print("[VIPER][VIEW] Tap buscar name=\(inputName)")
         presenter.onSearchTapped(name: inputName)
     }
 
+    /// FUNC-GUIDE: openDetail
+    /// - Que hace: ejecuta una parte del flujo de esta capa (UI, dominio, datos o infraestructura).
+    /// - Entrada/Salida: revisa parametros y retorno para entender como viaja el dato.
+    /// FUNC-GUIDE: openDetail
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     func openDetail() {
         print("[VIPER][VIEW] Tap abrir detalle")
         presenter.onOpenDetailTapped()
     }
 
+    /// FUNC-GUIDE: showLoading
+    /// - Que hace: ejecuta una parte del flujo de esta capa (UI, dominio, datos o infraestructura).
+    /// - Entrada/Salida: revisa parametros y retorno para entender como viaja el dato.
+    /// FUNC-GUIDE: showLoading
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     func showLoading(_ loading: Bool) {
         isLoading = loading
         print("[VIPER][VIEW] loading=\(loading)")
     }
 
+    /// FUNC-GUIDE: showResult
+    /// - Que hace: ejecuta una parte del flujo de esta capa (UI, dominio, datos o infraestructura).
+    /// - Entrada/Salida: revisa parametros y retorno para entender como viaja el dato.
+    /// FUNC-GUIDE: showResult
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     func showResult(_ fighter: DBZFighterRank) {
         resultText = "\(fighter.name) -> Tier \(fighter.tier)"
         print("[VIPER][VIEW] result=\(resultText)")
     }
 
+    /// FUNC-GUIDE: showError
+    /// - Que hace: ejecuta una parte del flujo de esta capa (UI, dominio, datos o infraestructura).
+    /// - Entrada/Salida: revisa parametros y retorno para entender como viaja el dato.
+    /// FUNC-GUIDE: showError
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     func showError(_ message: String) {
         resultText = "Error: \(message)"
         print("[VIPER][VIEW] error=\(message)")
     }
 
+    /// FUNC-GUIDE: showRouteMessage
+    /// - Que hace: ejecuta una parte del flujo de esta capa (UI, dominio, datos o infraestructura).
+    /// - Entrada/Salida: revisa parametros y retorno para entender como viaja el dato.
+    /// FUNC-GUIDE: showRouteMessage
+    /// - Qué hace: ejecuta este bloque de lógica dentro de su capa actual.
+    /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     func showRouteMessage(_ message: String) {
         routeText = message
         print("[VIPER][VIEW] route=\(message)")
