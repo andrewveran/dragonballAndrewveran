@@ -23,6 +23,13 @@ private enum DBZContainerMode: String, CaseIterable, Identifiable {
     var id: String { rawValue }
 }
 
+// LIST VS LAZYVSTACK (resumen practico):
+// - List: contenedor "todo en uno" para tablas en iOS (scroll, celdas, estilos, acciones, accesibilidad).
+//   Suele ser la opcion por defecto cuando quieres comportamiento de lista nativo con menos codigo.
+// - LazyVStack: apila vistas dentro de ScrollView y crea/renderiza filas bajo demanda (lazy),
+//   util para listas largas o UIs personalizadas donde List se queda corto.
+// - "VS" aqui significa comparar trade-offs: simplicidad y estilo nativo (List) vs control visual/flexibilidad (LazyVStack).
+
 struct DBZUIFlowView: View {
     @State private var mode: DBZContainerMode = .list
     @State private var query: String = ""
@@ -57,12 +64,30 @@ struct DBZUIFlowView: View {
                 .foregroundStyle(.secondary)
             }
 
+            GroupBox("List vs LazyVStack: para que sirve cada uno") {
+                VStack(alignment: .leading, spacing: 6) {
+                    Text("List: lista nativa con mucho comportamiento integrado.")
+                    Text("LazyVStack: layout mas flexible en ScrollView; carga vistas bajo demanda.")
+                    Text("Diferencia clave: List prioriza conveniencia nativa, LazyVStack prioriza control visual.")
+                }
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+            }
+
             Picker("Container", selection: $mode) {
                 ForEach(DBZContainerMode.allCases) { option in
                     Text(option.rawValue).tag(option)
                 }
             }
             .pickerStyle(.segmented)
+
+            Text(
+                mode == .list
+                ? "Modo actual: List (ideal para comportamiento de lista nativo)."
+                : "Modo actual: LazyVStack (ideal para personalizacion y carga perezosa)."
+            )
+            .font(.footnote)
+            .foregroundStyle(.secondary)
 
             TextField("Filtrar guerrero", text: $query)
                 .textFieldStyle(.roundedBorder)

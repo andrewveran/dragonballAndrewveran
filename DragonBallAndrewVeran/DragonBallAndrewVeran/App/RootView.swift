@@ -83,6 +83,48 @@ struct RootView: View {
                 NavigationLink("Pantalla 12 - Delivery Lab") {
                     DBZDeliveryView()
                 }
+
+                // Pantalla 13: lista UIKit programatica + lifecycle + delegate flow.
+                NavigationLink("Pantalla 13 - UIKit List Lifecycle") {
+                    DBZUIKitListLifecycleView()
+                }
+
+                // Pantallas 14-22: laboratorios de Instruments.
+                NavigationLink("Pantalla 14 - Instruments Leaks") {
+                    DBZInstrumentsLeaksView()
+                }
+
+                NavigationLink("Pantalla 15 - Instruments Allocations") {
+                    DBZInstrumentsAllocationsView()
+                }
+
+                NavigationLink("Pantalla 16 - Instruments VM Tracker") {
+                    DBZInstrumentsVMTrackerView()
+                }
+
+                NavigationLink("Pantalla 17 - Instruments Time Profiler") {
+                    DBZInstrumentsTimeProfilerView()
+                }
+
+                NavigationLink("Pantalla 18 - Instruments Core Animation") {
+                    DBZInstrumentsCoreAnimationView()
+                }
+
+                NavigationLink("Pantalla 19 - Instruments Network") {
+                    DBZInstrumentsNetworkView()
+                }
+
+                NavigationLink("Pantalla 20 - Instruments File Activity") {
+                    DBZInstrumentsFileActivityView()
+                }
+
+                NavigationLink("Pantalla 21 - Instruments Energy Log") {
+                    DBZInstrumentsEnergyView()
+                }
+
+                NavigationLink("Pantalla 22 - Instruments Concurrency") {
+                    DBZInstrumentsConcurrencyView()
+                }
             }
             .navigationTitle("Menu Principal")
         }

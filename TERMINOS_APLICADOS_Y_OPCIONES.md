@@ -512,3 +512,176 @@ if allGatesPassed && releaseNotesNotEmpty {
   ship = false
 }
 ```
+
+## Pantalla 13 (UIKit List Lifecycle) - resumen rapido
+Se usa en:
+- `DragonBallAndrewVeran/DragonBallAndrewVeran/Features/DBZUIKitListLifecycle/Presentation/DBZUIKitListLifecycleView.swift`
+
+Terminos que practica esta pantalla:
+- `UIKit programatico`: UI creada por codigo (`UILabel`, `UISegmentedControl`, `UITableView`, constraints).
+- `UIViewController Lifecycle`: `viewDidLoad` (setup + primera carga) y `viewWillAppear` (refresco liviano).
+- `UITableViewDataSource`: define cantidad de filas y contenido de cada celda.
+- `UITableViewDelegate`: reacciona al ciclo visual de celdas (ej. `willDisplay`).
+- `UITableViewDataSourcePrefetching`: adelanta carga antes de que el usuario llegue al final.
+- `UIRefreshControl`: pull-to-refresh para reconstruir y refrescar datos manualmente.
+- `Eager vs Paged loading`:
+  - Eager = renderiza todo de una vez (simple, pero costoso en listas grandes).
+  - Paged = carga por bloques (mejor para datos masivos y scroll fluido).
+- `Background thread + main thread`: dataset se construye fuera del main thread y luego se actualiza UI en main.
+- `Cell reuse`: `dequeueReusableCell` para evitar costo innecesario de crear celdas nuevas.
+- `Cost awareness`: evitar trabajo pesado dentro de `cellForRowAt`, medir tiempo de construccion y paginar.
+
+Donde se construyen y refrescan los datos (en esta pantalla):
+- Construccion principal: `buildDataAndRender(origin:)`.
+- Refresco por cambio de estrategia: `strategyChanged()`.
+- Refresco por gesto usuario: `refreshPulled()`.
+- Carga incremental masiva: `loadNextPageIfNeeded(trigger:)` desde `willDisplay` y `prefetchRowsAt`.
+
+Regla mental para decidir:
+- Lista pequena/mediana y simple -> puede servir carga completa.
+- Lista grande o potencialmente ilimitada -> usar paginacion + prefetch.
+- Si notas drops de FPS o consumo alto -> mover transformaciones a background y reducir trabajo por celda.
+
+Mini ejemplo del flujo (Pantalla 13):
+```swift
+override func viewDidLoad() {
+  configureUI()
+  configureTable()
+  buildDataAndRender(origin: "viewDidLoad") // construccion inicial
+}
+
+@objc private func refreshPulled() {
+  buildDataAndRender(origin: "pullToRefresh") // refresco manual
+}
+
+func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+  if indexPath.row >= visibleItems.count - 20 {
+    loadNextPageIfNeeded(trigger: "willDisplay") // paginacion
+  }
+}
+```
+
+## Pantalla 14 (Instruments Leaks) - resumen rapido
+Se usa en:
+- `DragonBallAndrewVeran/DragonBallAndrewVeran/Features/DBZInstrumentsLeaks/Presentation/DBZInstrumentsLeaksView.swift`
+
+Terminos que practica esta pantalla:
+- `Leaks`: deteccion de objetos no liberados.
+- `Retain Cycle`: ciclo de retencion con `Timer` capturando `self` fuerte.
+- `ARC`: diferencia entre liberar referencia temporal y mantener referencias globales.
+
+Escenarios:
+- Normal: `DBZSafeBox` usa `[weak self]` + invalidacion de timer.
+- Problema: `DBZLeakyCycleBox` mantiene ciclo y se guarda en bolsa global.
+
+Mini flujo:
+```swift
+viewModel.runNormal() // sin leak
+viewModel.runLeak()   // leak intencional
+```
+
+## Pantalla 15 (Instruments Allocations) - resumen rapido
+Se usa en:
+- `DragonBallAndrewVeran/DragonBallAndrewVeran/Features/DBZInstrumentsAllocations/Presentation/DBZInstrumentsAllocationsView.swift`
+
+Terminos que practica esta pantalla:
+- `Allocations`: crecimiento de heap por asignaciones.
+- `Temporary vs Retained Memory`: memoria temporal que se libera vs memoria retenida.
+
+Escenarios:
+- Normal: crea bloques `Data` temporales y los libera.
+- Problema: acumula bloques en arreglo retenido.
+
+Mini flujo:
+```swift
+viewModel.runNormal()  // sube y baja
+viewModel.runProblem() // subida sostenida
+```
+
+## Pantalla 16 (Instruments VM Tracker) - resumen rapido
+Se usa en:
+- `DragonBallAndrewVeran/DragonBallAndrewVeran/Features/DBZInstrumentsVMTracker/Presentation/DBZInstrumentsVMTrackerView.swift`
+
+Terminos que practica esta pantalla:
+- `VM Tracker`: observacion de memoria virtual y categorias de uso.
+- `NSCache`: cache con eviction para evitar crecimiento sin limite.
+- `Retained Buffers`: retencion de buffers grandes en memoria.
+
+Escenarios:
+- Normal: carga objetos en `NSCache` con limite.
+- Problema: guarda buffers en arreglo sin politica de eviction.
+
+## Pantalla 17 (Instruments Time Profiler) - resumen rapido
+Se usa en:
+- `DragonBallAndrewVeran/DragonBallAndrewVeran/Features/DBZInstrumentsTimeProfiler/Presentation/DBZInstrumentsTimeProfilerView.swift`
+
+Terminos que practica esta pantalla:
+- `Time Profiler`: hotspots de CPU por funcion.
+- `Main Thread Blocking`: impacto de computo pesado en hilo principal.
+- `Background Work`: mover trabajo costoso fuera del main thread.
+
+Escenarios:
+- Normal: calculo pesado en `Task.detached`.
+- Problema: calculo pesado directo en main thread.
+
+## Pantalla 18 (Instruments Core Animation) - resumen rapido
+Se usa en:
+- `DragonBallAndrewVeran/DragonBallAndrewVeran/Features/DBZInstrumentsCoreAnimation/Presentation/DBZInstrumentsCoreAnimationView.swift`
+
+Terminos que practica esta pantalla:
+- `Core Animation`: costo de render y composicion de capas.
+- `Overdraw/Effects cost`: blur, sombras y muchas capas animadas.
+
+Escenarios:
+- Normal: lista simple con pocas vistas.
+- Problema: grid grande con gradientes, blur, sombras y animacion continua.
+
+## Pantalla 19 (Instruments Network) - resumen rapido
+Se usa en:
+- `DragonBallAndrewVeran/DragonBallAndrewVeran/Features/DBZInstrumentsNetwork/Presentation/DBZInstrumentsNetworkView.swift`
+
+Terminos que practica esta pantalla:
+- `Network Instrument`: conteo y tiempo de requests.
+- `Burst traffic`: pico de trafico por concurrencia alta.
+- `URLSession + TaskGroup`: requests en paralelo.
+
+Escenarios:
+- Normal: 1 request.
+- Problema: burst de 20 requests concurrentes.
+
+## Pantalla 20 (Instruments File Activity) - resumen rapido
+Se usa en:
+- `DragonBallAndrewVeran/DragonBallAndrewVeran/Features/DBZInstrumentsFileActivity/Presentation/DBZInstrumentsFileActivityView.swift`
+
+Terminos que practica esta pantalla:
+- `File Activity`: operaciones de lectura/escritura en disco.
+- `I/O Patterns`: diferencia entre acceso puntual y acceso masivo.
+
+Escenarios:
+- Normal: escribe 1 archivo.
+- Problema: escribe 120 archivos y luego lee todo el directorio.
+
+## Pantalla 21 (Instruments Energy Log) - resumen rapido
+Se usa en:
+- `DragonBallAndrewVeran/DragonBallAndrewVeran/Features/DBZInstrumentsEnergy/Presentation/DBZInstrumentsEnergyView.swift`
+
+Terminos que practica esta pantalla:
+- `Energy Log`: costo energetico de CPU/Timers.
+- `Timer frequency`: impacto de 1 Hz vs 60 Hz.
+
+Escenarios:
+- Normal: timer liviano cada segundo.
+- Problema: timer 60 Hz con trabajo CPU en cada tick.
+
+## Pantalla 22 (Instruments Concurrency) - resumen rapido
+Se usa en:
+- `DragonBallAndrewVeran/DragonBallAndrewVeran/Features/DBZInstrumentsConcurrency/Presentation/DBZInstrumentsConcurrencyView.swift`
+
+Terminos que practica esta pantalla:
+- `Swift Concurrency Instrument`: visualizacion de tareas y carga concurrente.
+- `TaskGroup`: concurrencia estructurada.
+- `Actor`: acceso seguro a estado compartido.
+
+Escenarios:
+- Normal: pocas tareas + actor.
+- Problema: explosion de 1500 tareas concurrentes.

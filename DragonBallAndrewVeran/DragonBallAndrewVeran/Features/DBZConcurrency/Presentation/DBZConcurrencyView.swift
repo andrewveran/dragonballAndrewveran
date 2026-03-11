@@ -196,9 +196,9 @@ final class DBZConcurrencyViewModel: ObservableObject {
     /// - Entrada/Salida: revisa parámetros y retorno para seguir el viaje del dato.
     func runDetachedDemo() {
         Task.detached(priority: .background) {
-            let isMainAtStart = Thread.isMainThread
+            let isMainAtStart = await MainActor.run { Thread.isMainThread }
             try? await Task.sleep(nanoseconds: 400_000_000)
-            let isMainAtEnd = Thread.isMainThread
+            let isMainAtEnd = await MainActor.run { Thread.isMainThread }
 
             await MainActor.run {
                 print("[CONCURRENCY][DETACHED] startMain=\(isMainAtStart) endMain=\(isMainAtEnd)")
