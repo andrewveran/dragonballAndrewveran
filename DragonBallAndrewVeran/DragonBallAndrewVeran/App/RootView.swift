@@ -125,6 +125,31 @@ struct RootView: View {
                 NavigationLink("Pantalla 22 - Instruments Concurrency") {
                     DBZInstrumentsConcurrencyView()
                 }
+
+                // Pantallas 23-25: temas senior siguientes.
+                NavigationLink("Pantalla 23 - Deep Link + Navigation") {
+                    DBZDeepLinkNavigationView()
+                }
+
+                NavigationLink("Pantalla 24 - DI Container + Module Assembly") {
+                    DBZDIContainerView()
+                }
+
+                NavigationLink("Pantalla 25 - Testing Lab Real") {
+                    DBZTestingLabView()
+                }
+
+                NavigationLink("Pantalla 26 - GraphQL + Apollo Lab") {
+                    DBZGraphQLApolloView()
+                }
+
+                NavigationLink("Pantalla 27 - Offline First + Sync") {
+                    DBZOfflineSyncView()
+                }
+
+                NavigationLink("Pantalla 28 - Background Tasks Lab") {
+                    DBZBackgroundTasksView()
+                }
             }
             .navigationTitle("Menu Principal")
         }

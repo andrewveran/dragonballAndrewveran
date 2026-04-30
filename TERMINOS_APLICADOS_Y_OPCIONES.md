@@ -1,5 +1,157 @@
 # Terminos aplicados y opciones (mini guia)
 
+## Que es esta aplicacion
+Esta aplicacion es una app de estudio iOS tematizada en Dragon Ball. La idea no es solo "mostrar pantallas", sino usar el tema de Dragon Ball como contexto para practicar conceptos reales de desarrollo iOS con Swift, SwiftUI, UIKit, arquitectura por capas, concurrencia, persistencia, seguridad, calidad, release y performance.
+
+El proyecto esta pensado como una guia progresiva. Cada pantalla existe para explicar una idea concreta y aislarla lo suficiente como para que puedas entenderla sin perderte en demasiada complejidad al mismo tiempo. Por eso vas a ver una mezcla intencional de:
+- ejemplos pequenos y faciles de seguir;
+- separacion por features;
+- pantallas tipo laboratorio;
+- comentarios dentro del codigo que te dicen que mirar primero;
+- nombres de archivos y carpetas bastante directos.
+
+Si en el futuro quisieras replicar esta misma idea con otro tema, por ejemplo Naruto, Marvel, Pokemon o una app de ecommerce, lo importante no es Dragon Ball en si, sino la estructura didactica:
+- un menu raiz con modulos pequenos;
+- una pantalla por concepto o grupo de conceptos;
+- arquitectura consistente entre features;
+- comentarios orientados a lectura y estudio;
+- ejemplos que permitan ver el flujo del dato de punta a punta.
+
+## Vision grande del proyecto
+La app esta construida como un proyecto de aprendizaje progresivo. Eso significa que no todo busca ser "la implementacion mas enterprise posible", sino una implementacion lo bastante clara para que puedas:
+- abrir un archivo y entender rapidamente que rol cumple;
+- seguir el viaje del dato desde la UI hasta la capa de datos;
+- comparar patrones antiguos y modernos de iOS;
+- usar el proyecto como base para entrevistas, practica tecnica o demos educativas.
+
+En terminos generales, el proyecto mezcla:
+- `SwiftUI` para la mayoria de pantallas y flujo principal;
+- `UIKit` en pantallas puntuales para estudiar lifecycle, tablas y bridges;
+- `MVVM`, `VIPER`, `Clean Architecture` y `DIP` como estilos de organizacion;
+- `Combine`, `async/await`, `Task`, `TaskGroup`, `MainActor` y actores para concurrencia;
+- `UserDefaults`, `Keychain`, `Core Data`, `SwiftData` y labs de performance para ampliar el rango de estudio.
+
+## Como leer el proyecto
+La forma correcta de leer esta app no es archivo por archivo al azar. Lo mejor es leerla en capas y en flujo.
+
+Orden sugerido:
+1. Empieza por el entry point de la aplicacion para entender donde nace todo.
+2. Revisa el menu principal para ver como estan organizadas las pantallas.
+3. Elige una sola pantalla y sigue ese modulo completo.
+4. Dentro de esa pantalla, recorre `Presentation -> Domain -> Data`.
+5. Cuando termines una pantalla, vuelve al menu y pasa a la siguiente.
+
+Regla practica:
+- si quieres entender navegacion y composicion, mira `App` y `RootView`;
+- si quieres entender interaccion UI, mira `Presentation`;
+- si quieres entender reglas de negocio, mira `Domain`;
+- si quieres entender APIs, persistencia o detalles concretos, mira `Data`.
+
+## Convenciones de comentarios dentro del codigo
+Este proyecto tiene comentarios pensados para estudio. No son comentarios decorativos. La idea es que, al abrir un archivo, tengas una lectura guiada para entender su funcion dentro del sistema.
+
+### `LEARNING-CODE-GUIDE:`
+Este bloque aparece como encabezado en archivos importantes. Su objetivo es avisarte que ese archivo forma parte de una app de aprendizaje y que debe leerse como una pieza de una secuencia didactica, no solo como codigo aislado.
+
+Que te comunica:
+- el contexto general del archivo dentro del proyecto;
+- que conviene leer ese archivo siguiendo un flujo;
+- que el archivo tiene valor educativo, no solo funcional.
+
+Si replicas este modelo en otra app, este comentario te sirve como "contrato pedagogico": cualquier archivo importante le dice al lector como abordarlo.
+
+### `Como leer este archivo (guia rapida)`
+Este bloque explica que mirar primero cuando abres un archivo. En este proyecto normalmente te orienta con preguntas como:
+- cual es el objetivo del archivo;
+- cual es su entrada principal;
+- que transformacion hace;
+- cual es su salida;
+- que logs o pistas ayudan a seguir el flujo.
+
+Este tipo de comentario es especialmente util cuando compartes el proyecto con alguien que aun no domina la base de codigo. En lugar de obligarlo a inferir todo desde cero, le das un mapa mental inicial.
+
+Si quieres replicarlo, la recomendacion es mantener siempre la misma estructura para que todos los archivos "ensenen" de forma consistente.
+
+### `Consejo de estudio`
+Este bloque existe para bajar la ansiedad de lectura y darte una estrategia concreta. En esta app suele insistir en algo clave: seguir el flujo del dato.
+
+La logica es:
+- no intentes entender todo al mismo tiempo;
+- toma un caso simple, por ejemplo `Goku`;
+- sigue ese caso desde la UI hasta la respuesta;
+- repite hasta que puedas explicar el modulo sin mirar el codigo.
+
+Esto convierte la app en una herramienta de entrenamiento, no solo en una coleccion de features.
+
+### `Senior interview note:`
+Este comentario sirve para traducir una decision de codigo en lenguaje de entrevista tecnica o criterio senior. No solo dice "que hace" el codigo, sino "por que esta organizado asi" y que tradeoff de arquitectura o mantenimiento representa.
+
+Normalmente este bloque apunta a cosas como:
+- reducir acoplamiento;
+- evitar logica de negocio en capas incorrectas;
+- mantener responsabilidades claras;
+- facilitar escalabilidad o testing;
+- hacer que el root o la UI no conozcan detalles internos.
+
+Si replicas la app en otro proyecto, este bloque es muy valioso porque documenta no solo la solucion, sino la intencion arquitectonica.
+
+### `Entry point de la aplicacion`
+Este concepto aparece documentado en el archivo principal `App`. Es el punto donde arranca la aplicacion.
+
+En este proyecto el entry point esta en:
+- `DragonBallAndrewVeran/DragonBallAndrewVeran/App/DragonBallAndrewVeranApp.swift`
+
+Su responsabilidad es minima y correcta:
+- levantar el ciclo de vida de SwiftUI moderno;
+- crear el `WindowGroup`;
+- montar `RootView()` como punto de entrada visual;
+- evitar logica de negocio en esta capa.
+
+Esta decision es importante porque te deja una base limpia. Si en el futuro replicas esta app, el `App` debe seguir siendo delgado. Su trabajo no es resolver negocio, networking, persistencia ni coordinacion compleja. Su trabajo es arrancar la aplicacion y delegar.
+
+### `Menu principal`
+Despues del entry point, el siguiente archivo clave es:
+- `DragonBallAndrewVeran/DragonBallAndrewVeran/App/RootView.swift`
+
+`RootView` funciona como mapa del proyecto. Desde ahi puedes entender:
+- cuantas pantallas tiene la app;
+- en que orden fueron pensadas;
+- que tema practica cada modulo;
+- como crece la app sin que el entry point se vuelva complejo.
+
+Este archivo tambien muestra una decision importante de replicacion futura: el menu raiz debe conocer rutas y nombres de pantallas, pero no la logica interna de cada modulo.
+
+## Como replicar una app parecida en el futuro
+Si mas adelante quieres construir otra app educativa con esta misma filosofia, la receta base seria:
+
+1. Define un tema narrativo simple.
+Dragon Ball aqui funciona como envoltura visual y conceptual. El tema ayuda a que los ejemplos no se sientan abstractos.
+
+2. Organiza la app por features.
+Cada modulo deberia vivir en su carpeta y, cuando tenga sentido, dividirse en `Presentation`, `Domain` y `Data`.
+
+3. Decide un menu raiz progresivo.
+La app debe invitar a estudiar por etapas. Un `RootView` con pantallas numeradas o claramente nombradas funciona muy bien.
+
+4. Documenta el codigo para lectura, no solo para ejecucion.
+Los comentarios guia de este proyecto son parte central del valor educativo.
+
+5. Manten ejemplos pequenos pero reales.
+No hace falta una mega app. Hace falta que cada pantalla sea clara y suficientemente realista para ensenar un concepto util.
+
+6. Separa el "objetivo pedagogico" del "tema visual".
+Mañana puedes cambiar Dragon Ball por otro universo, pero mantener la misma estructura de aprendizaje.
+
+## Uso recomendado de este documento
+Este markdown funciona como mapa de referencia del proyecto. La idea es que primero leas esta introduccion y luego uses las secciones por termino o por pantalla para aterrizar cada concepto en archivos reales.
+
+La mejor forma de usarlo es:
+- leer la descripcion global;
+- abrir el `App` y el `RootView`;
+- escoger una pantalla;
+- venir aqui a buscar los terminos que practica;
+- volver al codigo con ese mapa mental ya claro.
+
 ## 1) MVVM
 Se usa en:
 - `DragonBallAndrewVeran/DragonBallAndrewVeran/Features/DBZCheck/Presentation/DBZCheckView.swift`
@@ -685,3 +837,105 @@ Terminos que practica esta pantalla:
 Escenarios:
 - Normal: pocas tareas + actor.
 - Problema: explosion de 1500 tareas concurrentes.
+
+## Pantalla 23 (Deep Link + Navigation Lab) - resumen rapido
+Se usa en:
+- `DragonBallAndrewVeran/DragonBallAndrewVeran/Features/DBZDeepLinkNavigation/Presentation/DBZDeepLinkNavigationView.swift`
+
+Terminos que practica esta pantalla:
+- `Deep Link`: entrada externa a una pantalla concreta por URL.
+- `NavigationStack(path:)`: navegacion programatica basada en estado.
+- `Route Parsing`: validacion de esquema, host y payload de la ruta.
+- `Error handling`: manejo de rutas invalidas sin romper la UI.
+
+Escenarios:
+- Normal: abrir `dragonball://fighter/goku` o `dragonball://tournament/7`.
+- Problema: enviar una ruta invalida como `dragonball://planet/namek`.
+
+## Pantalla 24 (DI Container + Module Assembly) - resumen rapido
+Se usa en:
+- `DragonBallAndrewVeran/DragonBallAndrewVeran/Features/DBZDIContainer/Presentation/DBZDIContainerView.swift`
+
+Terminos que practica esta pantalla:
+- `Dependency Injection`: inyeccion por constructor y por composition root.
+- `DI Container`: fabrica simple que arma el modulo segun el entorno.
+- `Environment switching`: cambio entre implementacion `live` y `mock`.
+- `Module Assembly`: la vista no conoce la implementacion concreta del repositorio.
+
+Escenarios:
+- Normal: resolver dependencias en `live`.
+- Comparacion: cambiar a `mock` sin tocar la vista ni el caso de uso.
+
+## Pantalla 25 (Testing Lab Real) - resumen rapido
+Se usa en:
+- `DragonBallAndrewVeran/DragonBallAndrewVeran/Features/DBZTestingLab/Presentation/DBZTestingLabView.swift`
+
+Terminos que practica esta pantalla:
+- `Unit testing mindset`: validar comportamiento, no solo ejecutar codigo.
+- `Test doubles`: servicio determinista y servicio que falla.
+- `Happy path / Boundary / Failure path`: tres tipos basicos de prueba.
+- `UseCase testing`: probar la logica del caso de uso aislada de infraestructura real.
+
+Escenarios:
+- Caso feliz: `goku` debe rankear `S`.
+- Boundary: `krillin` cae en rango `B`.
+- Error path: servicio fallando para validar manejo de errores.
+
+## Pantalla 26 (GraphQL + Apollo Lab) - resumen rapido
+Se usa en:
+- `DragonBallAndrewVeran/DragonBallAndrewVeran/Features/DBZGraphQLApollo/Presentation/DBZGraphQLApolloView.swift`
+
+Terminos que practica esta pantalla:
+- `GraphQL`: pedir exactamente los campos que necesita la UI.
+- `HTTP POST GraphQL`: enviar `query` + `variables` en JSON.
+- `UseCase + Repository`: mantener separado el acceso remoto de la UI.
+- `Apollo readiness`: dejar el modulo listo para migrar a Apollo + codegen.
+
+Endpoint consultado:
+- `https://dokkanapi.azurewebsites.net/graphql`
+
+Query usada en la pantalla:
+```graphql
+query SearchCharacters($name: String!) {
+  characters(name: $name) {
+    id
+    name
+    title
+  }
+}
+```
+
+Escenarios:
+- Normal: buscar `broly`, `raditz` o `cooler`.
+- Error: nombre vacio o respuesta GraphQL con errores.
+- Evolucion senior: reemplazar parseo manual por Apollo SDK + tipos generados desde schema.
+
+## Pantalla 27 (Offline First + Sync) - resumen rapido
+Se usa en:
+- `DragonBallAndrewVeran/DragonBallAndrewVeran/Features/DBZOfflineSync/Presentation/DBZOfflineSyncView.swift`
+
+Terminos que practica esta pantalla:
+- `Offline-first`: mostrar cache local antes de depender de red.
+- `Stale-while-revalidate`: servir cache y luego actualizar en segundo plano.
+- `Repository pattern`: coordinar cache local y fuente remota.
+- `Sync mindset`: separar lectura inmediata de revalidacion remota.
+
+Escenarios:
+- Normal: cargar datos locales al instante.
+- Normal mejorado: mostrar cache y luego refrescar remoto.
+- Riesgo controlado: si falla remoto, la UI conserva cache.
+
+## Pantalla 28 (Background Tasks Lab) - resumen rapido
+Se usa en:
+- `DragonBallAndrewVeran/DragonBallAndrewVeran/Features/DBZBackgroundTasks/Presentation/DBZBackgroundTasksView.swift`
+
+Terminos que practica esta pantalla:
+- `BackgroundTasks`: framework de iOS para trabajo diferido.
+- `BGAppRefreshTaskRequest`: request para refresh en background.
+- `Pending work queue`: mantener trabajos pendientes fuera del flujo inmediato de UI.
+- `Scheduling vs execution`: una cosa es agendar y otra realmente ejecutar.
+
+Escenarios:
+- Normal: agendar refresh.
+- Normal: ejecutar una sync simulada y vaciar parte de la cola.
+- Evolucion senior: registrar identificadores en `Info.plist` y `App` para scheduling real.
